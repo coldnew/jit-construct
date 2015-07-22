@@ -4,10 +4,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/mman.h>
-#include <stdio.h>
-#include <sys/mman.h>
-#include <stdint.h>
-#include <stdlib.h>
 
 int main(int argc, char *argv[]) {
   // Machine code for:

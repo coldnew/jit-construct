@@ -40,7 +40,7 @@ jit-arm: dynasm-driver.c jit-arm.h util.c
 		$(CROSS_COMPILE)gcc	$(CFLAGS) $(CPPFLAGS) -o jit-arm -DJIT=\"jit-arm.h\" \
 		dynasm-driver.c util.c
 jit-arm.h: jit-arm.dasc
-	        lua dynasm/dynasm.lua jit-arm.dasc > jit-arm.h
+	        lua dynasm/dynasm.lua -o jit-arm.h jit-arm.dasc
 
 test: test_vector test_stack
 	./test_vector && ./test_stack
@@ -54,4 +54,4 @@ clean:
 	$(RM) $(BIN) \
 	      hello-x64 hello-arm hello.s \
 	      test_vector test_stack \
-	      jit.h
+	      jit.h jit-arm.h

@@ -17,7 +17,7 @@ int main(int argc, char *argv[]) {
   };
 
   if (argc < 2) {
-    fprintf(stderr, "Usage: jit1 <integer>\n");
+    fprintf(stderr, "Usage: jit0-arm <integer>\n");
     return 1;
   }
 

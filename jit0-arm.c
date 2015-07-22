@@ -36,7 +36,11 @@ int main(int argc, char *argv[]) {
   memcpy(mem, code, sizeof(code));
 
   // TODO:
-  __clear_cache((char*) mem, (char*) (mem + sizeof(code)));
+#if defined(__GNUC__)
+  __builtin___clear_cache((char*) mem, (char*) (mem + sizeof(code)));
+#else
+#error "Missing builtin to flush instruction cache"
+#endif
 
   // The function will return the user's value.
   int (*func)() = mem;

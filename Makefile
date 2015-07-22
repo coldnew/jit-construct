@@ -1,4 +1,4 @@
-BIN = interpreter compiler-x64 compiler-arm jit0 jit0-arm jit
+BIN = interpreter compiler-x64 compiler-arm jit0 jit0-arm jit jit-arm
 
 CROSS_COMPILE = arm-linux-gnueabihf-
 QEMU_ARM = qemu-arm -L /usr/arm-linux-gnueabihf
@@ -35,6 +35,12 @@ jit: dynasm-driver.c jit.h util.c
 		dynasm-driver.c util.c
 jit.h: jit.dasc
 	        lua dynasm/dynasm.lua jit.dasc > jit.h
+
+jit-arm: dynasm-driver.c jit-arm.h util.c
+		$(CROSS_COMPILE)gcc	$(CFLAGS) $(CPPFLAGS) -o jit-arm -DJIT=\"jit-arm.h\" \
+		dynasm-driver.c util.c
+jit-arm.h: jit-arm.dasc
+	        lua dynasm/dynasm.lua jit-arm.dasc > jit-arm.h
 
 test: test_vector test_stack
 	./test_vector && ./test_stack

@@ -5,7 +5,14 @@
 #include <sys/mman.h>
 
 #include "dynasm/dasm_proto.h"
+
+#if defined(__x86__) || defined(__amd64__)
 #include "dynasm/dasm_x86.h"
+#elif defined(__arm__)
+#include "dynasm/dasm_arm.h"
+#else
+#error "Not implement this architecture yet!"
+#endif
 
 void initjit(dasm_State **state, const void *actionlist);
 void *jitcode(dasm_State **state);

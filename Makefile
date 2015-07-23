@@ -42,6 +42,9 @@ jit-arm: dynasm-driver.c jit-arm.h util.c
 jit-arm.h: jit-arm.dasc
 	        lua dynasm/dynasm.lua -o jit-arm.h jit-arm.dasc
 
+run-jit-arm: jit-arm
+		$(QEMU_ARM) ./jit-arm prog/hello.b
+
 test: test_vector test_stack
 	./test_vector && ./test_stack
 

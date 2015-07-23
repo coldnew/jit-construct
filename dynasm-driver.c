@@ -35,6 +35,8 @@ void *jitcode(dasm_State **state) {
   *(size_t*)mem = size;
   void *ret = mem + sizeof(size_t);
 
+  __builtin___clear_cache((char*) mem, (char*) size + sizeof(size_t));
+
   dasm_encode(state, ret);
   dasm_free(state);
 
@@ -49,6 +51,7 @@ void *jitcode(dasm_State **state) {
   //  objdump -D -b binary -mi386 -Mx86-64 /tmp/jitcode
   // Or:
   //  ndisasm -b 64 /tmp/jitcode
+  // arm-linux-gnueabihf-objdump -D -b binary /tmp/jitcode  -m arm -M reg-names-std
   FILE *f = fopen("/tmp/jitcode", "wb");
   fwrite(ret, size, 1, f);
   fclose(f);

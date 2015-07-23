@@ -5,21 +5,7 @@
 
 |.arch arm
 |.actionlist actions
-|
-|// Use r4 as our cell pointer.
-|// Since r4 is a callee-save register, it will be preserved
-|// across our calls to getchar and putchar.
-|.define PTR, r4
-|
-|// Macro for calling a function.
-|// In cases where our target is <=2**32 away we can use
-|//   | call &addr
-|// But since we don't know if it will be, we use this safe
-|// sequence instead.
-|.macro callp, addr
-|  mov r6, #(uintptr_t)addr
-|  blx r6
-|.endmacro
+
 
 #define Dst &state
 #define MAX_NESTING 256
@@ -29,32 +15,17 @@ int main(int argc, char *argv[]) {
   dasm_State *state;
   initjit(&state, actions);
 
-  unsigned int maxpc = 0;
-  int pcstack[MAX_NESTING];
-  int *top = pcstack, *limit = pcstack + MAX_NESTING;
-
-  printf("limit = %d, top = %d, maxpc = %d\n", *limit, *top, maxpc);
-
   // Function prologue.
-  | push {PTR, r5, lr}
-  | mov PTR, r0
-
-  for (char *p = read_file(argv[1]); *p; p++) {
-  }
+  | mov r1, #1
 
   // Function epilogue.
-  |  pop {PTR, r5, pc}
-  |  bx lr
+  | bx lr
 
-  void (*fptr)(char*) = jitcode(&state);
-  char *mem = calloc(30000, 1);
-#if defined(__GNUC__)
-  __builtin___clear_cache((char*) mem, (char*) (mem + sizeof(char) * 30000));
-#else
-#error "Missing builtin to flush instruction cache"
-#endif
-  fptr(mem);
-  free(mem);
+  int (*fptr)() = jitcode(&state);
+
+  // TODO: find segmuentfult reason
+  fptr();
+
   free_jitcode(fptr);
   return 0;
 }

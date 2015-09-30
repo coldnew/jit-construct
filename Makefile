@@ -3,6 +3,7 @@ BIN = interpreter \
       jit-x64 jit-arm
 
 CROSS_COMPILE = arm-linux-gnueabihf-
+RISCV64_CROSS_COMPILE = riscv64-unknown-linux-gnu-
 QEMU_ARM = qemu-arm -L /usr/arm-linux-gnueabihf
 LUA = lua
 
@@ -59,6 +60,9 @@ jit-arm.h: jit-arm.dasc
 run-jit-arm: jit-arm
 	$(QEMU_ARM) jit-arm progs/hello.b && \
 	$(CROSS_COMPILE)objdump -D -b binary -marm /tmp/jitcode
+
+jit0-riscv64: tests/jit0-riscv64.c
+	$(RISCV64_CROSS_COMPILE)gcc $(CFLAGS) -o $@ $^
 
 bench-jit-x64: jit-x64
 	@echo
